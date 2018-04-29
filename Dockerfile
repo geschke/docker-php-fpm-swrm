@@ -3,7 +3,7 @@ FROM ubuntu:bionic
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2018-04-22"
+LABEL last_changed="2018-04-29"
 
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND noninteractive 
@@ -18,8 +18,9 @@ RUN apt-get update \
 	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
 	&& apt-get install -y git php-fpm \
 	php-mysql php-curl php-intl \
-	php-mbstring php-bz2 php-pgsql\
-	php-xml php-zip php-gd \
+	php-mbstring php-bz2 php-pgsql php-xml php-xsl php-sqlite3 \
+	php-recode php-opcache php-zip php-gd php-redis php-memcache \
+	php-json php-intl \
 #        php7.0-mysql \
 #        php7.0-intl \
 #        php7.0-mbstring \
