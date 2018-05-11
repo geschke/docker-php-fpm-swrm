@@ -87,7 +87,7 @@ the Nginx fastcgi options.
 
 ## Usage example with Docker swarm mode
 
-coming soon...
+Have a look at some blog articles at [www.kuerbis.org](https://www.kuerbis.org) (German only, please use Google Translate).
 
 ## Credits
 
