@@ -3,7 +3,7 @@ FROM ubuntu:bionic
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2018-05-11"
+LABEL last_changed="2018-05-25"
 
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND noninteractive 
@@ -19,7 +19,7 @@ RUN apt-get update \
 	&& apt-get install -y git ssmtp php-fpm \
 	php-mysql php-curl php-intl \
 	php-mbstring php-bz2 php-pgsql php-xml php-xsl php-sqlite3 \
-	php-recode php-opcache php-zip php-gd php-redis php-memcache \
+	php-recode php-opcache php-zip php-gd php-redis php-memcache php-zip \
 	php-json php-intl \
 #        php7.0-mysql \
 #        php7.0-intl \
