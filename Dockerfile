@@ -1,9 +1,8 @@
-#FROM phusion/baseimage
-FROM ubuntu:bionic
+FROM ubuntu:latest
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2018-05-25"
+LABEL last_changed="2018-08-26"
 
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND noninteractive 
