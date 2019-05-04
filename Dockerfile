@@ -2,7 +2,7 @@ FROM ubuntu:disco
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2019-04-29"
+LABEL last_changed="2019-05-05"
 
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND noninteractive 
@@ -20,13 +20,6 @@ RUN apt-get update \
 	php-mbstring php-bz2 php-pgsql php-xml php-xsl php-sqlite3 \
 	php-recode php-opcache php-zip php-gd php-redis php-memcache php-zip \
 	php-json php-intl \
-	#        php7.0-mysql \
-	#        php7.0-intl \
-	#        php7.0-mbstring \
-	#        php7.0-mcrypt \
-	#        php7.0-xml \
-	#        php7.0-readline \
-	#        php7.0-curl \
 	&& rm -rf /var/lib/apt/lists/* 
 #	&& cp /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
@@ -72,4 +65,3 @@ WORKDIR /usr/share/nginx/html
 EXPOSE 9000
 
 CMD ["php-fpm7.2"]
-
