@@ -1,7 +1,7 @@
 # geschke/php-fpm-swrm
 
-This is a minimalistic php-fpm Docker image based on Ubuntu 19.10 (Eoan) image.  
-The image provides the current PHP 7.3 version only. 
+This is a minimalistic php-fpm Docker image based on Ubuntu 20.04 LTS (Focal) image.  
+The image provides the current PHP 7.4 version only. 
 
 ## Usage
 
