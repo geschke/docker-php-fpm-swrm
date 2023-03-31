@@ -10,14 +10,14 @@ on:
   #  - cron: '42 9 * * *'
   push:
     branches: 
-      - master
+      - main
     # Publish semver tags as releases. 
     # Every release in a branch will be tagged, so it is not necessary to specify additional branches.
     #tags: [ 'v*.*.*' ]
     tags: 
       - 'v*'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   # Use GitHub Container Repository
