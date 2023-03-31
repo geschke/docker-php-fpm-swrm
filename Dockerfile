@@ -1,8 +1,8 @@
-FROM ubuntu:focal-20211006
+FROM ubuntu:focal-20230308
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2021-11-10"
+LABEL last_changed="2023-03-31"
 
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND noninteractive 
