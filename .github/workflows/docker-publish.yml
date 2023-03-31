@@ -85,7 +85,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           tags: |
-            type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'master') }}
+            type=raw,value=latest,enable=${{ endsWith(GitHub.ref, 'main') }}
             type=match,pattern=v(.*),group=1
           flavor: |
             latest=false
