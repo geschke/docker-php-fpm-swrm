@@ -7,20 +7,26 @@ LABEL last_changed="2023-03-31"
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND noninteractive 
 
-# Install PHP 8.1 with some libraries
+# Install PHP 8.2 with some libraries from sury PPA
 RUN apt-get update \
 	&& apt-get -y upgrade \
 	&& apt-get -y dist-upgrade \
 	&& apt-get install -y ca-certificates \
 	&& apt-get install -y --no-install-recommends \
-	&& apt-get install -y locales \
+	&& apt-get install -y locales software-properties-common \
+	&& add-apt-repository -y ppa:ondrej/php \
+	&& apt-get update \
 	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-	&& apt-get install -y git ssmtp wget php-fpm \
-	php-mysql php-curl php-intl \
-	php-mbstring php-bz2 php-pgsql php-xml php-xsl php-sqlite3 \
-	php-opcache php-zip php-gd php-redis php-memcache php-zip \
-	php-json php-intl \
+	&& apt-get install -y git ssmtp wget \
+	&& apt-get install -y php8.2-fpm \
+	php8.2-curl php8.2-mysql php8.2-intl \
+    php8.2-mbstring php8.2-bz2 php8.2-pgsql php8.2-xml php8.2-xsl php8.2-sqlite3 \
+	php8.2-opcache php8.2-zip php8.2-gd php8.2-redis php8.2-memcache php8.2-memcached \
+	php8.2-mongodb php8.2-mcrypt php8.2-bcmath php8.2-protobuf php8.2-imagick \
+	&& apt-get -y upgrade \
 	&& rm -rf /var/lib/apt/lists/* 
+	
+	#\
 #	&& cp /usr/share/zoneinfo/Etc/UTC /etc/localtime
 # php-recode
 
@@ -35,8 +41,8 @@ RUN cd /tmp/ \
 
 # taken from official Docker PHP image
 RUN set -ex \
-	&& cd /etc/php/8.1/fpm \
-	#&& mkdir /run/php \
+	&& cd /etc/php/8.2/fpm \
+	&& mkdir /run/php \
 	&& { \
 	echo '[global]'; \
 	echo 'error_log = /proc/self/fd/2'; \
@@ -63,4 +69,4 @@ WORKDIR /usr/share/nginx/html
 
 EXPOSE 9000
 
-CMD ["php-fpm8.1"]
+CMD ["php-fpm8.2"]
