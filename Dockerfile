@@ -2,12 +2,12 @@ FROM ubuntu:jammy-20230308
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2023-03-31"
+LABEL last_changed="2023-04-01"
 
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND noninteractive 
 
-# Install PHP 8.2 with some libraries from sury PPA
+# Install PHP 8.0 with some libraries from sury PPA
 RUN apt-get update \
 	&& apt-get -y upgrade \
 	&& apt-get -y dist-upgrade \
@@ -18,11 +18,11 @@ RUN apt-get update \
 	&& apt-get update \
 	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
 	&& apt-get install -y git ssmtp wget \
-	&& apt-get install -y php8.2-fpm \
-	php8.2-curl php8.2-mysql php8.2-intl \
-    php8.2-mbstring php8.2-bz2 php8.2-pgsql php8.2-xml php8.2-xsl php8.2-sqlite3 \
-	php8.2-opcache php8.2-zip php8.2-gd php8.2-redis php8.2-memcache php8.2-memcached \
-	php8.2-mongodb php8.2-mcrypt php8.2-bcmath php8.2-protobuf php8.2-imagick \
+	&& apt-get install -y php8.0-fpm \
+	php8.0-curl php8.0-mysql php8.0-intl \
+    php8.0-mbstring php8.0-bz2 php8.0-pgsql php8.0-xml php8.0-xsl php8.0-sqlite3 \
+	php8.0-opcache php8.0-zip php8.0-gd php8.0-redis php8.0-memcache php8.0-memcached \
+	php8.0-mongodb php8.0-mcrypt php8.0-bcmath php8.0-protobuf php8.0-imagick \
 	&& apt-get -y upgrade \
 	&& rm -rf /var/lib/apt/lists/* 
 	
@@ -41,7 +41,7 @@ RUN cd /tmp/ \
 
 # taken from official Docker PHP image
 RUN set -ex \
-	&& cd /etc/php/8.2/fpm \
+	&& cd /etc/php/8.0/fpm \
 	&& mkdir /run/php \
 	&& { \
 	echo '[global]'; \
@@ -69,4 +69,4 @@ WORKDIR /usr/share/nginx/html
 
 EXPOSE 9000
 
-CMD ["php-fpm8.2"]
+CMD ["php-fpm8.0"]
