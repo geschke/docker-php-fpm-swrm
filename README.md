@@ -5,6 +5,7 @@ The image provides different PHP versions as seen below.
 
 ## Supported tags
 
+* 8.3-fpm-ubuntu22.04-sury-n - PHP 8.3 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
 * 8.2-fpm-ubuntu22.04-sury-n - PHP 8.2 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
 * 8.1-fpm-ubuntu22.04-sury-n - PHP 8.1 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
 * 8.1-fpm-n, **latest** - PHP 8.1 included in the current Ubuntu 22.04 LTS distribution. This is the **main** branch as known before.
