@@ -2,7 +2,7 @@ FROM ubuntu:jammy-20240227
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2024-04-14"
+LABEL last_changed="2024-04-15"
 
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND noninteractive 
