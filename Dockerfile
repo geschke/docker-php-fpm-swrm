@@ -1,11 +1,11 @@
-FROM ubuntu:jammy-20230308
+FROM ubuntu:jammy-20240911.1
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2023-03-31"
+LABEL last_changed="2024-09-27"
 
 # necessary to set default timezone Etc/UTC
-ENV DEBIAN_FRONTEND noninteractive 
+ENV DEBIAN_FRONTEND=noninteractive 
 
 # Install PHP 8.1 with some libraries
 RUN apt-get update \
@@ -24,7 +24,7 @@ RUN apt-get update \
 #	&& cp /usr/share/zoneinfo/Etc/UTC /etc/localtime
 # php-recode
 
-ENV LANG en_US.utf8
+ENV LANG=en_US.utf8
 
 # Install composer
 COPY install-composer.sh /tmp 
