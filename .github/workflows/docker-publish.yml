@@ -221,52 +221,37 @@ jobs:
           source ./image_mappings.sh
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
 
-      # Iterate over the directories to build tags dynamically
-      - name: Iterate over directories and load version
-        id: load_versions
+      # Iterate over the directories, load versions, and check tags
+      - name: Check tags and set build status for each directory
+        id: check_tags
         run: |
           source ./image_mappings.sh
           for dir in "${!images[@]}"; do
             version_file="./$dir/version.txt"
             if [[ -f "$version_file" ]]; then
               version=$(cat "$version_file")
-              tag="${images[$dir]}-${version}"
-              echo "FULL_TAG_$dir=$tag" >> $GITHUB_ENV
+              full_tag="${images[$dir]}-${version}"
+              echo "Checking tag $full_tag in directory $dir"
+
+              # Check Docker Hub for the tag
+              TAG_EXISTS_DOCKERHUB=$(curl -s https://hub.docker.com/v2/repositories/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}/tags/${full_tag} | jq -r '.name')
+              if [ "$TAG_EXISTS_DOCKERHUB" == "${full_tag}" ]; then
+                echo "DOCKERHUB_TAG_EXISTS_$dir=true" >> $GITHUB_ENV
+              else
+                echo "DOCKERHUB_TAG_EXISTS_$dir=false" >> $GITHUB_ENV
+              fi
+
+              # Check GHCR for the tag
+              TAG_EXISTS_GHCR=$(curl -s -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} https://ghcr.io/v2/${{ github.repository }}/tags/list | jq -r '.tags[]' | grep -E "^${full_tag}$" || true)
+              if [ -n "$TAG_EXISTS_GHCR" ]; then
+                echo "GHCR_TAG_EXISTS_$dir=true" >> $GITHUB_ENV
+              else
+                echo "GHCR_TAG_EXISTS_$dir=false" >> $GITHUB_ENV
+              fi
+
             else
               echo "Error: No version.txt found in $dir"
               exit 1
-            fi
-          done
-
-      # Check if Docker tag already exists on Docker Hub (Full Tag with Version)
-      - name: Check if Docker tag exists on Docker Hub
-        run: |
-          source ./image_mappings.sh
-          for dir in "${!images[@]}"; do
-            FULL_TAG=$(echo "FULL_TAG_$dir" | sed 's/[^a-zA-Z0-9]//g')
-            TAG_EXISTS=$(curl -s https://hub.docker.com/v2/repositories/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}/tags/${FULL_TAG} | jq -r '.name')
-            if [ "$TAG_EXISTS" == "${FULL_TAG}" ]; then
-              echo "Tag $TAG_EXISTS already exists on Docker Hub. Skipping push for $FULL_TAG."
-              echo "DOCKERHUB_TAG_EXISTS_$dir=true" >> $GITHUB_ENV
-            else
-              echo "Tag does not exist on Docker Hub. Proceeding with push for $FULL_TAG."
-              echo "DOCKERHUB_TAG_EXISTS_$dir=false" >> $GITHUB_ENV
-            fi
-          done
-
-      # Check if Docker tag exists on GitHub Container Registry (GHCR)
-      - name: Check if Docker tag exists on GHCR
-        run: |
-          source ./image_mappings.sh
-          for dir in "${!images[@]}"; do
-            FULL_TAG=$(echo "FULL_TAG_$dir" | sed 's/[^a-zA-Z0-9]//g')
-            TAG_EXISTS=$(curl -s -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} https://ghcr.io/v2/${{ github.repository }}/tags/list | jq -r '.tags[]' | grep -E "^${FULL_TAG}$" || true)
-            if [ -n "$TAG_EXISTS" ]; then
-              echo "Tag $TAG_EXISTS already exists on GHCR. Skipping push for $FULL_TAG."
-              echo "GHCR_TAG_EXISTS_$dir=true" >> $GITHUB_ENV
-            else
-              echo "Tag does not exist on GHCR. Proceeding with push for $FULL_TAG."
-              echo "GHCR_TAG_EXISTS_$dir=false" >> $GITHUB_ENV
             fi
           done
 
@@ -274,11 +259,17 @@ jobs:
       - name: Build Docker Images (Dry Run)
         run: |
           source ./image_mappings.sh
-
           for dir in "${!images[@]}"; do
-            FULL_TAG=$(echo "FULL_TAG_$dir" | sed 's/[^a-zA-Z0-9]//g')
-            if [ "${{ env.DOCKERHUB_TAG_EXISTS_$dir }}" == 'false' ] && [ "${{ env.GHCR_TAG_EXISTS_$dir }}" == 'false' ]; then
-              echo "Building and pushing image $FULL_TAG from directory $dir"
+            # Read the dynamically set environment variables from previous step
+            DOCKERHUB_EXISTS=$(eval echo \$DOCKERHUB_TAG_EXISTS_$dir)
+            GHCR_EXISTS=$(eval echo \$GHCR_TAG_EXISTS_$dir)
+
+            if [ "$DOCKERHUB_EXISTS" == "false" ] && [ "$GHCR_EXISTS" == "false" ]; then
+              version_file="./$dir/version.txt"
+              version=$(cat "$version_file")
+              full_tag="${images[$dir]}-${version}"
+
+              echo "Building and pushing image $full_tag from directory $dir"
 
               # Copy install-composer.sh to the directory before building the image
               cp ./install-composer.sh ./$dir/
@@ -289,19 +280,19 @@ jobs:
 
               # Build the Docker image with Dry Run (no push)
               docker buildx build --platform linux/amd64,linux/arm64 \
-                -t "$REGISTRY_DOCKER_HUB/$IMAGE_NAME:$FULL_TAG" \
-                -t "$REGISTRY_GITHUB/$IMAGE_NAME:$FULL_TAG" \
+                -t "$REGISTRY_DOCKER_HUB/$IMAGE_NAME:$full_tag" \
+                -t "$REGISTRY_GITHUB/$IMAGE_NAME:$full_tag" \
                 --push=false ./$dir
 
               # Clean up: Remove install-composer.sh from the directory
               rm ./$dir/install-composer.sh
 
               # Simulate push by outputting the commands (this is just a log, no actual push happens)
-              echo "Dry Run completed for $IMAGE_NAME:$FULL_TAG"
+              echo "Dry Run completed for $IMAGE_NAME:$full_tag"
               echo "Push command would be:"
-              echo "docker push $REGISTRY_DOCKER_HUB/$IMAGE_NAME:$FULL_TAG"
-              echo "docker push $REGISTRY_GITHUB/$IMAGE_NAME:$FULL_TAG"
+              echo "docker push $REGISTRY_DOCKER_HUB/$IMAGE_NAME:$full_tag"
+              echo "docker push $REGISTRY_GITHUB/$IMAGE_NAME:$full_tag"
             else
-              echo "Skipping build for $FULL_TAG as it already exists."
+              echo "Skipping build for $full_tag as it already exists."
             fi
           done
