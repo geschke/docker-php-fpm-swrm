@@ -231,7 +231,6 @@ jobs:
             if [[ -f "$version_file" ]]; then
               version=$(cat "$version_file")
               tag="${images[$dir]}-${version}"
-              echo "Building tag: $tag from directory $dir with version $version"
               echo "FULL_TAG_$dir=$tag" >> $GITHUB_ENV
             else
               echo "Error: No version.txt found in $dir"
@@ -241,10 +240,10 @@ jobs:
 
       # Check if Docker tag already exists on Docker Hub (Full Tag with Version)
       - name: Check if Docker tag exists on Docker Hub
-        id: tag_exists_dockerhub
         run: |
+          source ./image_mappings.sh
           for dir in "${!images[@]}"; do
-            FULL_TAG="${!FULL_TAG_$dir}"
+            FULL_TAG=$(echo "FULL_TAG_$dir" | sed 's/[^a-zA-Z0-9]//g')
             TAG_EXISTS=$(curl -s https://hub.docker.com/v2/repositories/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}/tags/${FULL_TAG} | jq -r '.name')
             if [ "$TAG_EXISTS" == "${FULL_TAG}" ]; then
               echo "Tag $TAG_EXISTS already exists on Docker Hub. Skipping push for $FULL_TAG."
@@ -257,10 +256,10 @@ jobs:
 
       # Check if Docker tag exists on GitHub Container Registry (GHCR)
       - name: Check if Docker tag exists on GHCR
-        id: tag_exists_ghcr
         run: |
+          source ./image_mappings.sh
           for dir in "${!images[@]}"; do
-            FULL_TAG="${!FULL_TAG_$dir}"
+            FULL_TAG=$(echo "FULL_TAG_$dir" | sed 's/[^a-zA-Z0-9]//g')
             TAG_EXISTS=$(curl -s -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} https://ghcr.io/v2/${{ github.repository }}/tags/list | jq -r '.tags[]' | grep -E "^${FULL_TAG}$" || true)
             if [ -n "$TAG_EXISTS" ]; then
               echo "Tag $TAG_EXISTS already exists on GHCR. Skipping push for $FULL_TAG."
@@ -277,7 +276,7 @@ jobs:
           source ./image_mappings.sh
 
           for dir in "${!images[@]}"; do
-            FULL_TAG="${!FULL_TAG_$dir}"
+            FULL_TAG=$(echo "FULL_TAG_$dir" | sed 's/[^a-zA-Z0-9]//g')
             if [ "${{ env.DOCKERHUB_TAG_EXISTS_$dir }}" == 'false' ] && [ "${{ env.GHCR_TAG_EXISTS_$dir }}" == 'false' ]; then
               echo "Building and pushing image $FULL_TAG from directory $dir"
 
