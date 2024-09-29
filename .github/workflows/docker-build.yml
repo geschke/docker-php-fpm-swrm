@@ -48,6 +48,14 @@ jobs:
         run: |
           source ./image_mappings.sh
 
+          # Check if the install-composer.sh script exists in the main directory
+          INSTALL_COMPOSER="install-composer.sh"
+          if [[ ! -f $INSTALL_COMPOSER ]]; then
+            echo "Error: $INSTALL_COMPOSER not found in the main directory."
+            exit 1
+          fi
+
+
           # Iterate over directories and push images only if there are changes
           for dir in "${!images[@]}"; do
             tag=${images[$dir]}
