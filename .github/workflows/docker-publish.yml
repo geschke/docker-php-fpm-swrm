@@ -234,22 +234,9 @@ jobs:
             echo "DOCKERHUB_TAG_EXISTS=false" >> $GITHUB_ENV
           fi
 
-      # Check if Docker tag exists on GitHub Container Registry (GHCR)
-      - name: Check if Docker tag exists on GHCR
-        id: tag_exists_ghcr
-        run: |
-          TAG_EXISTS=$(curl -s -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} https://ghcr.io/v2/${{ github.repository }}/tags/list | jq -r '.tags[]?' | grep "${{ steps.load_mappings.outputs.tag }}" || true)
-          if [ -n "$TAG_EXISTS" ]; then
-            echo "Tag $TAG_EXISTS already exists on GHCR. Skipping push."
-            echo "GHCR_TAG_EXISTS=true" >> $GITHUB_ENV
-          else
-            echo "Tag does not exist on GHCR. Proceeding with push."
-            echo "GHCR_TAG_EXISTS=false" >> $GITHUB_ENV
-          fi
-
       # Perform a Dry-Run (Build but do not push) if the tags don't already exist
       - name: Build Docker Images (Dry Run)
-        if: env.DOCKERHUB_TAG_EXISTS == 'false' && env.GHCR_TAG_EXISTS == 'false'
+        if: env.DOCKERHUB_TAG_EXISTS == 'false' 
         run: |
           source ./image_mappings.sh
 
