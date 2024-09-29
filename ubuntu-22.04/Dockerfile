@@ -27,7 +27,7 @@ RUN apt-get update \
 ENV LANG=en_US.utf8
 
 # Install composer
-COPY ../install-composer.sh /tmp 
+COPY install-composer.sh /tmp 
 RUN cd /tmp/ \
   && sh install-composer.sh \
 	&& mv /tmp/composer.phar /usr/local/bin/composer \
