@@ -63,16 +63,17 @@ jobs:
 
             # Full image tag including the version (hyphen for version number)
             full_tag="${tag}-${version}"
+            echo "Full tag is: $full_tag ."
 
             # Check if there were changes in the directory
-            if git diff --name-only HEAD^ HEAD | grep -q "$dir/"; then
+            #if git diff --name-only HEAD^ HEAD | grep -q "$dir/"; then
               # Build the Docker image and push to both Docker Hub and GHCR
               docker build -t "$REGISTRY_DOCKER_HUB/$IMAGE_NAME:$full_tag" -t "$REGISTRY_GITHUB/$IMAGE_NAME:$full_tag" ./$dir
               #docker push "$REGISTRY_DOCKER_HUB/$IMAGE_NAME:$full_tag"
               #docker push "$REGISTRY_GITHUB/$IMAGE_NAME:$full_tag"
 
               echo "Built and pushed $IMAGE_NAME:$full_tag to Docker Hub and GHCR."
-            else
-              echo "No changes in $dir, skipping build and push."
-            fi
+            #else
+            #  echo "No changes in $dir, skipping build and push."
+            #fi
           done
