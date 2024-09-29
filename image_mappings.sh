@@ -1,5 +1,5 @@
 
-IMAGE_NAME="php-fpm-swrm"
+IMAGE_NAME="geschke/php-fpm-swrm"
 
 # Define an associative array that maps directory names to image tags
 declare -A images=(
