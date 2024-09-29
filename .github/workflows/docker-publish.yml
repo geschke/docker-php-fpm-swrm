@@ -241,14 +241,6 @@ jobs:
                 echo "DOCKERHUB_TAG_EXISTS_$dir=false" >> $GITHUB_ENV
               fi
 
-              # Check GHCR for the tag
-              TAG_EXISTS_GHCR=$(curl -s -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} https://ghcr.io/v2/${{ github.repository }}/tags/list | jq -r '.tags[]' | grep -E "^${full_tag}$" || true)
-              if [ -n "$TAG_EXISTS_GHCR" ]; then
-                echo "GHCR_TAG_EXISTS_$dir=true" >> $GITHUB_ENV
-              else
-                echo "GHCR_TAG_EXISTS_$dir=false" >> $GITHUB_ENV
-              fi
-
             else
               echo "Error: No version.txt found in $dir"
               exit 1
@@ -262,9 +254,8 @@ jobs:
           for dir in "${!images[@]}"; do
             # Read the dynamically set environment variables from previous step
             DOCKERHUB_EXISTS=$(eval echo \$DOCKERHUB_TAG_EXISTS_$dir)
-            GHCR_EXISTS=$(eval echo \$GHCR_TAG_EXISTS_$dir)
-
-            if [ "$DOCKERHUB_EXISTS" == "false" ] && [ "$GHCR_EXISTS" == "false" ]; then
+        
+            if [ "$DOCKERHUB_EXISTS" == "false" ]; then
               version_file="./$dir/version.txt"
               version=$(cat "$version_file")
               full_tag="${images[$dir]}-${version}"
