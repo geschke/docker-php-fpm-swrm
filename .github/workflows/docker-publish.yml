@@ -51,7 +51,7 @@ jobs:
             version=$(cat "$version_file")
             full_tag="${{ matrix.tagging }}-${version}"
             echo "Full tag is: $full_tag"
-            echo "full_tag=$full_tag" >> $GITHUB_OUTPUT
+            echo "full_tag=$full_tag" >> "$GITHUB_OUTPUT"
 
       - name: Query existing Docker image tags
         id: query_tag
