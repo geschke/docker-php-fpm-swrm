@@ -102,8 +102,7 @@ jobs:
         with:
           context: .
           file: ${{ matrix.directory }}/Dockerfile
-          push: false
-          load: true
+          push: true
           tags: | 
             ${{ env.IMAGE_NAME }}:${{ steps.generate_tag.outputs.full_tag }}
             ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:${{ steps.generate_tag.outputs.full_tag }}           
