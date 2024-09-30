@@ -41,9 +41,23 @@ jobs:
         name: Copy composer installation file
         run: |
           cp ./install-composer.sh ./${{ matrix.directory }}
+      
+      -
+        name: Build full tag based on version file
+        id: generate_tag
+        run: |
+          version_file="${{ matrix.directory }}version.txt"
+          if [[ -f "$version_file" ]]; then
+            version=$(cat "$version_file")
+            full_tag="${{ matrix.tagging }}-${version}"
+            echo "Full tag is: $full_tag"
+            echo "full_tag=$full_tag" >> $GITHUB_OUTPUT
 
       - name: Query existing Docker image tags
+        id: query_tag
         run: |
+          echo "full tag built in previous step:"
+          echo "Tag ${{ steps.generate_tag.outputs.full_tag }}"
           TAG_EXISTS=$(curl -s "https://hub.docker.com/v2/repositories/${{ matrix.image }}/tags/?page_size=100" | jq -r '.results[].name' | grep -w "${{ matrix.tagging }}" || true)
           if [ -n "$TAG_EXISTS" ]; then
             echo "Tag ${{ matrix.tagging}} already exists!"
