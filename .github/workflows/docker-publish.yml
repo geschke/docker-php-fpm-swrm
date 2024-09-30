@@ -61,11 +61,11 @@ jobs:
           echo "Tag ${{ steps.generate_tag.outputs.full_tag }}"
           TAG_EXISTS=$(curl -s "https://hub.docker.com/v2/repositories/${{ matrix.image }}/tags/?page_size=100" | jq -r '.results[].name' | grep -w "${{ steps.generate_tag.outputs.full_tag }}" || true)
           if [ -n "$TAG_EXISTS" ]; then
-            echo "Tag ${{ steps.generate_tag.outputs.full_tag }} already exists, so exit with success code!"
-            echo "run_build=true" >> "$GITHUB_OUTPUT"
+            echo "Tag ${{ steps.generate_tag.outputs.full_tag }} already exists, so don't build the docker image!"
+            echo "run_build=false" >> "$GITHUB_OUTPUT"
           else
             echo "Tag ${{ steps.generate_tag.outputs.full_tag }} does not exist, proceed with building the image."
-            echo "run_build=false" >> "$GITHUB_OUTPUT"
+            echo "run_build=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Test step after query
