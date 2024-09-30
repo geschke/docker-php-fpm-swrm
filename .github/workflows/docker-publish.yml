@@ -66,11 +66,10 @@ jobs:
           else
             echo "Tag ${{ steps.generate_tag.outputs.full_tag }} does not exist, proceed with building the image."
             echo "run_build=false" >> "$GITHUB_OUTPUT"
-
           fi
 
       - name: Test step after query
-        if: ${{ steps.query_tag.outputs.run_build == true }}
+        if: "${{ steps.query_tag.outputs.run_build == 'true' }}"
         run: |
           echo "build docker image ${{ matrix.directory }} ${{ matrix.image }} here... with tag ${{ steps.generate_tag.outputs.full_tag }} "
       #-
