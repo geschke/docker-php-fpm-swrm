@@ -81,7 +81,7 @@ jobs:
         run: |
           echo "full tag built in previous step:"
           echo "Tag ${{ steps.generate_tag.outputs.full_tag }}"
-          TAG_EXISTS=$(curl -s "https://hub.docker.com/v2/repositories/${{ matrix.image }}/tags/?page_size=100" | jq -r '.results[].name' | grep -w "${{ steps.generate_tag.outputs.full_tag }}" || true)
+          TAG_EXISTS=$(curl -s "https://hub.docker.com/v2/repositories/${{ env.IMAGE_NAME }}/tags/?page_size=100" | jq -r '.results[].name' | grep -w "${{ steps.generate_tag.outputs.full_tag }}" || true)
           if [ -n "$TAG_EXISTS" ]; then
             echo "Tag ${{ steps.generate_tag.outputs.full_tag }} already exists, so don't build the docker image!"
             echo "run_build=false" >> "$GITHUB_OUTPUT"
@@ -93,7 +93,7 @@ jobs:
       - name: Test build image
         if: "${{ steps.query_tag.outputs.run_build == 'true' }}"
         run: |
-          echo "build docker image ${{ matrix.directory }} ${{ matrix.image }} here... with tag ${{ steps.generate_tag.outputs.full_tag }} "
+          echo "build docker image ${{ matrix.directory }} ${{ env.IMAGE_NAME }} here... with tag ${{ steps.generate_tag.outputs.full_tag }} "
       
       -
         name: Build and push
