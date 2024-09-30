@@ -41,11 +41,22 @@ jobs:
         name: Copy composer installation file
         run: |
           cp ./install-composer.sh ./${{ matrix.directory }}
-      -
-        name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ${{ matrix.directory }}/Dockerfile
-          push: false
-          tags: ${{ matrix.tagging }}
+
+      - name: Query existing Docker image tags
+        run: |
+          TAG_EXISTS=$(curl -s "https://hub.docker.com/v2/repositories/${{ matrix.image }}/tags/?page_size=100" | jq -r '.results[].name' | grep -w "${{ matrix.tagging }}" || true)
+          if [ -n "$TAG_EXISTS" ]; then
+            echo "Tag ${{ matrix.tagging}} already exists!"
+          else
+            echo "Tag ${{ matrix.tagging}} does not exist, proceed with building the image."
+          fi
+
+      #-
+      #  name: Build and push
+      #  uses: docker/build-push-action@v6
+      #  with:
+      #    context: .
+      #    file: ${{ matrix.directory }}/Dockerfile
+      #    push: false
+      #    load: true
+      #    tags: ${{ matrix.tagging }}
