@@ -1,5 +1,7 @@
 #!/bin/bash
-
+#
+# Build all PHP images locally
+#
 
 # Load image mappings and central image name from external file
 source ./image_mappings.sh

@@ -3,12 +3,24 @@
 This is a minimalistic php-fpm Docker image based on the official Ubuntu images.  
 The image provides different PHP versions as seen below.
 
-## Supported tags
+## Supported PHP versions
+
+### Current versions
+
+
+* 8.3-fpm-ubuntu24.04-sury-n - PHP 8.3 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 24.04 LTS
+* 8.2-fpm-ubuntu24.04-sury-n - PHP 8.2 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 24.04 LTS
 
 * 8.3-fpm-ubuntu22.04-sury-n - PHP 8.3 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
 * 8.2-fpm-ubuntu22.04-sury-n - PHP 8.2 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
 * 8.1-fpm-ubuntu22.04-sury-n - PHP 8.1 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
-* 8.1-fpm-n, **latest** - PHP 8.1 included in the current Ubuntu 22.04 LTS distribution. This is the **main** branch as known before.
+
+* 8.3-fpm-n, PHP 8.3 included in the current Ubuntu 24.04 LTS distribution. 
+* 8.1-fpm-n, **latest** - PHP 8.1 included in Ubuntu 22.04 LTS distribution. This is the **main** branch as known before. Due to the new build scheme the **latest** tag is still connected with this version. This will be changed soon. 
+
+### Older / deprecated versions
+
+
 * 8.0-fpm-ubuntu22.04-sury-n - PHP 8.0 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
 * 7.4-fpm-ubuntu22.04-sury-n - PHP 7.4 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
 * 7.4-fpm-n - PHP 7.4 included in the Ubuntu 20.04 LTS distribution

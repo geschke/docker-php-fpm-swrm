@@ -27,8 +27,18 @@ jobs:
         include:
           - directory: ./ubuntu-22.04/
             tagging: 8.1-fpm
+          - directory: ./ubuntu-24.04/
+            tagging: 8.3-fpm
+          - directory: ./ubuntu-22.04-sury-8.1/
+            tagging: 8.1-fpm-ubuntu22.04-sury
           - directory: ./ubuntu-22.04-sury-8.2/
             tagging: 8.2-fpm-ubuntu22.04-sury
+          - directory: ./ubuntu-22.04-sury-8.3/
+            tagging: 8.3-fpm-ubuntu22.04-sury
+          - directory: ./ubuntu-24.04-sury-8.2/
+            tagging: 8.2-fpm-ubuntu24.04-sury
+          - directory: ./ubuntu-24.04-sury-8.3/
+            tagging: 8.3-fpm-ubuntu24.04-sury
     permissions:
       contents: read
       packages: write
