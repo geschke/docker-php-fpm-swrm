@@ -109,10 +109,12 @@ jobs:
           fi
 
       - name: Test build image
-#        if: "${{ steps.query_tag.outputs.run_build == 'true' && steps.generate_tag.outputs.full_tag != '' }}"
+        if: "${{ steps.query_tag.outputs.run_build == 'true' && steps.generate_tag.outputs.full_tag != '' }}"
         run: |
           echo "build docker image ${{ matrix.directory }} ${{ env.IMAGE_NAME }} here... with tag ${{ steps.generate_tag.outputs.full_tag }} "
           echo "set to latest tag? ${{ matrix.setlatest }} / ${{ matrix.setlatest == true }} - ${{ steps.query_tag.outputs.run_build }} / ${{ steps.query_tag.outputs.run_build == 'true' }} full check: ${{ matrix.setlatest == 'true' && steps.query_tag.outputs.run_build == 'true' }}"
+          # output true or false in matrix variables is a boolean expression, 
+          # in contrast to output of steps...outputs..., this evaluates as string!
       
       -
         name: Build and push
@@ -127,10 +129,10 @@ jobs:
             ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:${{ steps.generate_tag.outputs.full_tag }}
             
       - name: Tag as latest if applicable
-        if: "${{ matrix.setlatest == 'true' && steps.query_tag.outputs.run_build == 'true' && steps.generate_tag.outputs.full_tag != '' }}"
+        if: "${{ matrix.setlatest == true && steps.query_tag.outputs.run_build == 'true' && steps.generate_tag.outputs.full_tag != '' }}"
         uses: docker/build-push-action@v6
         with:
-          context: ./${{ matrix.directory }}
+          context: .
           file: ${{ matrix.directory }}/Dockerfile
           push: true
           tags: |
