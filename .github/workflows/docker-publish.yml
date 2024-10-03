@@ -27,18 +27,25 @@ jobs:
         include:
           - directory: ./ubuntu-22.04/
             tagging: 8.1-fpm
+            latest: false
           - directory: ./ubuntu-24.04/
             tagging: 8.3-fpm
+            latest: true
           - directory: ./ubuntu-22.04-sury-8.1/
             tagging: 8.1-fpm-ubuntu22.04-sury
+            latest: false
           - directory: ./ubuntu-22.04-sury-8.2/
             tagging: 8.2-fpm-ubuntu22.04-sury
+            latest: false
           - directory: ./ubuntu-22.04-sury-8.3/
             tagging: 8.3-fpm-ubuntu22.04-sury
+            latest: false
           - directory: ./ubuntu-24.04-sury-8.2/
             tagging: 8.2-fpm-ubuntu24.04-sury
+            latest: false
           - directory: ./ubuntu-24.04-sury-8.3/
             tagging: 8.3-fpm-ubuntu24.04-sury
+            latest: false
     permissions:
       contents: read
       packages: write
@@ -87,6 +94,7 @@ jobs:
           fi
 
       - name: Query existing Docker image tags
+        if: github.event_name != 'pull_request'
         id: query_tag
         run: |
           echo "full tag built in previous step:"
@@ -101,13 +109,13 @@ jobs:
           fi
 
       - name: Test build image
-        if: "${{ steps.query_tag.outputs.run_build == 'true' }}"
+        if: "${{ steps.query_tag.outputs.run_build == 'true' && steps.generate_tag.outputs.full_tag != '' }}"
         run: |
           echo "build docker image ${{ matrix.directory }} ${{ env.IMAGE_NAME }} here... with tag ${{ steps.generate_tag.outputs.full_tag }} "
       
       -
         name: Build and push
-        if: "${{ steps.query_tag.outputs.run_build == 'true' }}"
+        if: "${{ steps.query_tag.outputs.run_build == 'true' && steps.generate_tag.outputs.full_tag != '' }}"
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -115,4 +123,15 @@ jobs:
           push: true
           tags: | 
             ${{ env.IMAGE_NAME }}:${{ steps.generate_tag.outputs.full_tag }}
-            ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:${{ steps.generate_tag.outputs.full_tag }}           
+            ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:${{ steps.generate_tag.outputs.full_tag }}
+            
+      - name: Tag as latest if applicable
+        if: "${{ matrix.latest == 'true' && steps.query_tag.outputs.run_build == 'true' }}"
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ matrix.directory }}
+          file: ${{ matrix.directory }}/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest

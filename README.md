@@ -3,6 +3,16 @@
 This is a minimalistic php-fpm Docker image based on the official Ubuntu images.  
 The image provides different PHP versions as seen below.
 
+## Update (October 3, 2024)
+
+### New Build Schema
+
+The build schema has been updated for better efficiency, flexibility, and speed. Git tags are no longer used to version Docker images, and they are now deprecated. All future images will follow the new tagging structure. The legacy Git-tagged images are no longer maintained or considered in the build process.
+
+### Latest Image Update
+
+The `latest` Docker image has shifted from the previous `ubuntu22.04` base (tagged `8.1-fpm-n`) to the new `ubuntu24.04` base, now tagged as `8.3-fpm-n`. Please update your workflows accordingly if you rely on the `latest` tag.
+
 ## Supported PHP versions
 
 ### Current versions
@@ -15,8 +25,8 @@ The image provides different PHP versions as seen below.
 * 8.2-fpm-ubuntu22.04-sury-n - PHP 8.2 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
 * 8.1-fpm-ubuntu22.04-sury-n - PHP 8.1 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
 
-* 8.3-fpm-n, PHP 8.3 included in the current Ubuntu 24.04 LTS distribution. 
-* 8.1-fpm-n, **latest** - PHP 8.1 included in Ubuntu 22.04 LTS distribution. This is the **main** branch as known before. Due to the new build scheme the **latest** tag is still connected with this version. This will be changed soon. 
+* 8.3-fpm-n, **latest** - PHP 8.3 included in the current Ubuntu 24.04 LTS distribution. The **latest** tag has switched to this version on 2024-10-03.
+* 8.1-fpm-n - PHP 8.1 included in Ubuntu 22.04 LTS distribution. 
 
 ### Older / deprecated versions
 
