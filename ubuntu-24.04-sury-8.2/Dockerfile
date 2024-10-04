@@ -2,12 +2,12 @@ FROM ubuntu:noble-20240904.1
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2024-10-03"
+LABEL last_changed="2024-10-04"
 
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND=noninteractive 
 
-# Install PHP 8.3 with some libraries from sury PPA
+# Install PHP 8.2 with some libraries from sury PPA
 RUN apt-get update \
 	&& apt-get -y upgrade \
 	&& apt-get -y dist-upgrade \
@@ -18,11 +18,11 @@ RUN apt-get update \
 	&& apt-get update \
 	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
 	&& apt-get install -y git ssmtp wget \
-	&& apt-get install -y php8.3-fpm \
-	php8.3-curl php8.3-mysql php8.3-intl \
-    php8.3-mbstring php8.3-bz2 php8.3-pgsql php8.3-xml php8.3-xsl php8.3-sqlite3 \
-	php8.3-opcache php8.3-zip php8.3-gd php8.3-redis php8.3-memcache php8.3-memcached \
-	php8.3-mongodb php8.3-mcrypt php8.3-bcmath php8.3-protobuf php8.3-imagick \
+	&& apt-get install -y php8.2-fpm \
+	php8.2-curl php8.2-mysql php8.2-intl \
+    php8.2-mbstring php8.2-bz2 php8.2-pgsql php8.2-xml php8.2-xsl php8.2-sqlite3 \
+	php8.2-opcache php8.2-zip php8.2-gd php8.2-redis php8.2-memcache php8.2-memcached \
+	php8.2-mongodb php8.2-mcrypt php8.2-bcmath php8.2-protobuf php8.2-imagick \
 	&& apt-get -y upgrade \
 	&& rm -rf /var/lib/apt/lists/* 
 	
@@ -41,7 +41,7 @@ RUN cd /tmp/ \
 
 # taken from official Docker PHP image
 RUN set -ex \
-	&& cd /etc/php/8.3/fpm \
+	&& cd /etc/php/8.2/fpm \
 	&& mkdir -p /run/php \
 	&& { \
 	echo '[global]'; \
@@ -69,4 +69,4 @@ WORKDIR /usr/share/nginx/html
 
 EXPOSE 9000
 
-CMD ["php-fpm8.3"]
+CMD ["php-fpm8.2"]
