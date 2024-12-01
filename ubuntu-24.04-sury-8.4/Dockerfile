@@ -2,7 +2,7 @@ FROM ubuntu:noble-20241015
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2024-11-21"
+LABEL last_changed="2024-12-01"
 
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND=noninteractive 
@@ -21,14 +21,12 @@ RUN apt-get update \
 	&& apt-get install -y php8.4-fpm \
 	php8.4-curl php8.4-mysql php8.4-intl \
     php8.4-mbstring php8.4-bz2 php8.4-pgsql php8.4-xml php8.4-xsl php8.4-sqlite3 \
-	php8.4-opcache php8.4-zip php8.4-gd php8.4-mongodb php8.4-mcrypt php8.4-bcmath php-predis \
+	php8.4-opcache php8.4-zip php8.4-gd php8.4-mongodb php8.4-mcrypt php8.4-bcmath  \
+  php8.4-protobuf  php8.4-imagick php8.4-redis php8.4-memcache php8.4-memcached \
 	&& apt-get -y upgrade \
 	&& rm -rf /var/lib/apt/lists/* 
 	
-# currently not available:
-# php8.4-protobuf, php8.4-imagick, php8.4-redis, php8.4-memcache, php8.4-memcached
-
-	#\
+#\
 #	&& cp /usr/share/zoneinfo/Etc/UTC /etc/localtime
 # php-recode
 

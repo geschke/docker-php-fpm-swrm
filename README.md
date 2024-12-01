@@ -17,7 +17,7 @@ The `latest` Docker image has shifted from the previous `ubuntu22.04` base (tagg
 
 ### Current versions
 
-
+* 8.4-fpm-ubuntu24.04-sury-n - PHP 8.4 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 24.04 LTS
 * 8.3-fpm-ubuntu24.04-sury-n - PHP 8.3 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 24.04 LTS
 * 8.2-fpm-ubuntu24.04-sury-n - PHP 8.2 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 24.04 LTS
 

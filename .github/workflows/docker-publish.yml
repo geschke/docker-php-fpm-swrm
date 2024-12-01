@@ -46,6 +46,9 @@ jobs:
           - directory: ./ubuntu-24.04-sury-8.3/
             tagging: 8.3-fpm-ubuntu24.04-sury
             setlatest: false
+          - directory: ./ubuntu-24.04-sury-8.4/
+            tagging: 8.4-fpm-ubuntu24.04-sury
+            setlatest: false  
     permissions:
       contents: read
       packages: write
