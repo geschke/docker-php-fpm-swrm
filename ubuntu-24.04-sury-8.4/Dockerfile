@@ -1,8 +1,8 @@
-FROM ubuntu:noble-20241015
+FROM ubuntu:noble-20251027
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
-LABEL last_changed="2024-12-01"
+LABEL last_changed="2025-03-14"
 
 # necessary to set default timezone Etc/UTC
 ENV DEBIAN_FRONTEND=noninteractive 
