@@ -1,4 +1,4 @@
-FROM ubuntu:noble-20251027
+FROM ubuntu:noble-20250127
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 
