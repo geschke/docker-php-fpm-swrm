@@ -1,88 +1,251 @@
 # geschke/php-fpm-swrm
 
-This is a minimalistic php-fpm Docker image based on the official Ubuntu images.  
-The image provides different PHP versions as seen below.
+Minimal **PHP-FPM Docker images based on Ubuntu LTS distributions**.
 
-## Update (October 3, 2024)
+The images provide multiple PHP versions either from the official Ubuntu repositories or from the widely used
+[https://launchpad.net/~ondrej/+archive/ubuntu/php/](https://launchpad.net/~ondrej/+archive/ubuntu/php/) repository.
 
-### New Build Schema
+The repository name still contains `swrm` for historical reasons. The image was originally created for Docker Swarm deployments, but today it is primarily used as a **general-purpose PHP-FPM container for standard Docker setups**. The repository name is kept for compatibility.
 
-The build schema has been updated for better efficiency, flexibility, and speed. Git tags are no longer used to version Docker images, and they are now deprecated. All future images will follow the new tagging structure. The legacy Git-tagged images are no longer maintained or considered in the build process.
 
-### Latest Image Update
+## Supported PHP Versions
 
-The `latest` Docker image has shifted from the previous `ubuntu22.04` base (tagged `8.1-fpm-n`) to the new `ubuntu24.04` base, now tagged as `8.3-fpm-n`. Please update your workflows accordingly if you rely on the `latest` tag.
+Most PHP versions in these images are built using the packages from the
+Ondřej Surý PHP repository:
 
-## Supported PHP versions
+https://launchpad.net/~ondrej/+archive/ubuntu/php/
 
-### Current versions
+This repository provides newer PHP versions for Ubuntu LTS releases than the
+ones included in Ubuntu itself.
 
-* 8.4-fpm-ubuntu24.04-sury-n - PHP 8.4 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 24.04 LTS
-* 8.3-fpm-ubuntu24.04-sury-n - PHP 8.3 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 24.04 LTS
-* 8.2-fpm-ubuntu24.04-sury-n - PHP 8.2 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 24.04 LTS
+`n` represents the **build number**. Higher numbers indicate newer builds.
 
-* 8.3-fpm-ubuntu22.04-sury-n - PHP 8.3 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
-* 8.2-fpm-ubuntu22.04-sury-n - PHP 8.2 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
-* 8.1-fpm-ubuntu22.04-sury-n - PHP 8.1 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
+### Ubuntu 24.04 LTS based images (deb.sury.org packages)
 
-* 8.3-fpm-n, **latest** - PHP 8.3 included in the current Ubuntu 24.04 LTS distribution. The **latest** tag has switched to this version on 2024-10-03.
-* 8.1-fpm-n - PHP 8.1 included in Ubuntu 22.04 LTS distribution. 
+* `8.4-fpm-ubuntu24.04-sury-n`
+* `8.3-fpm-ubuntu24.04-sury-n`
+* `8.2-fpm-ubuntu24.04-sury-n`
+
+### Ubuntu 22.04 LTS based images (deb.sury.org packages)
+
+* `8.3-fpm-ubuntu22.04-sury-n`
+* `8.2-fpm-ubuntu22.04-sury-n`
+* `8.1-fpm-ubuntu22.04-sury-n`
+
+### Ubuntu packaged PHP versions
+
+These variants use the PHP version included directly in Ubuntu.
+
+* `8.3-fpm-n`, **latest** – PHP 8.3 included in Ubuntu 24.04 LTS
+* `8.1-fpm-n` – PHP 8.1 included in Ubuntu 22.04 LTS
 
 ### Older / deprecated versions
 
+These versions are kept for compatibility but are no longer actively maintained.
 
-* 8.0-fpm-ubuntu22.04-sury-n - PHP 8.0 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
-* 7.4-fpm-ubuntu22.04-sury-n - PHP 7.4 from deb.sury.org [PPA](https://launchpad.net/~ondrej/+archive/ubuntu/php/) based on Ubuntu 22.04 LTS
-* 7.4-fpm-n - PHP 7.4 included in the Ubuntu 20.04 LTS distribution
+* `8.0-fpm-ubuntu22.04-sury-n`
+* `7.4-fpm-ubuntu22.04-sury-n`
+* `7.4-fpm-n`
 
-n = build number, higher numbers are newer builds
 
-## Usage
+## Image Tags
 
-To download the image run
+Two different tag schemes are used in this repository.
 
-    docker pull geschke/php-fpm-swrm
+### Tags for images based on deb.sury.org packages
 
-This is a minimalistic approach to build a php-fpm environment. It doesn't
-need configuration (and there is currently no way to modify the options
-without inheriting the image).
-Additional it installs the Composer dependency manager.
+These tags are used for images that provide PHP versions from the Ondřej Surý repository:
 
-This image is intended for running as PHP-FPM backend in a Docker swarm mode environment.
+```text
+phpversion-fpm-ubuntuversion-sury-build
+```
 
-For sure it is possible to start the container with the legacy "docker run" command, as seen in the following example.
+Example:
 
-To start the container, just run a command like this:
-  
-    docker run -d --name phpfpm -p 127.0.0.1:9000:9000 \
-         --volume /path/to/your/files/on/host:/var/www/html \
-         geschke/php-fpm-swrm
+```text
+8.3-fpm-ubuntu24.04-sury-9
+```
 
-In the above example you will start a container named "phpfpm" which mounts
-the volume /path/to/your/files/on/host to the internal directory
-/var/www/html.
-The -p option opens the port 9000 on localhost, so any Proxy or web server
-can reach the php-fpm target. If you want to access from another server,
-i.e. outside the current machine, just use the -p option without limiting
-the host, e.g. -p 9000:9000. But beware if you expose the port like this - without a firewall your php-fpm
-installation is open to the world!
+### Tags for images based on the PHP version included in Ubuntu
 
-## Usage example with Nginx
+These tags are used for images based directly on the PHP version shipped with Ubuntu:
 
-To use Nginx, set up a configuration like this:
+```text
+phpversion-fpm-build
+```
 
-    [...|
-    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
-    #
-    location ~ \.php$ {
-        # Use the tcp connection
-        fastcgi_pass 127.0.0.1:9000;
-        # ...but not the socket
-        #fastcgi_pass unix:/run/php/php7.0-fpm.sock;
-        fastcgi_index index.php;
-        include fastcgi.conf;
-    }
-    [...]
+Example:
+
+```text
+8.3-fpm-5
+```
+
+The `latest` tag always refers to the PHP version included in the **current Ubuntu LTS release maintained in this repository**, not to a deb.sury.org based image.
+
+
+## Pulling the Image
+
+```
+docker pull geschke/php-fpm-swrm
+```
+
+## Running the Container
+
+Example:
+
+```
+docker run -d 
+--name phpfpm 
+--restart unless-stopped 
+-p 127.0.0.1:9000:9000 
+-v /path/to/your/php/files:/var/www/html 
+geschke/php-fpm-swrm:latest
+
+```
+
+This starts a container named `phpfpm` and mounts your PHP application files
+into `/var/www/html`.
+
+The option `-p 127.0.0.1:9000:9000` exposes the PHP-FPM port **only on localhost**.
+This is typically used when a web server or reverse proxy (e.g. nginx) runs on
+the same machine and connects to PHP-FPM locally.
+
+If you want to expose the port to other hosts:
+
+```
+-p 9000:9000
+
+```
+
+Be careful when exposing PHP-FPM directly to the network. Without additional
+protection (e.g. firewall rules), the service would be reachable from anywhere.
+
+
+## Example Directory Layout
+
+A typical project structure could look like this:
+
+```text
+project/
+├── html
+│   └── index.php
+├── nginx
+│   ├── conf.d
+│   │   └── compression.conf
+│   └── sites-enabled
+│       └── default
+├── php
+│   └── conf.d
+│       └── 99-custom.ini
+└── compose.yml
+```
+
+In this example, `html/` contains the PHP application files.
+The `nginx/` directory contains the local nginx configuration, and `php/conf.d/` contains optional custom PHP configuration files that can be mounted into the container.
+
+## Docker Compose Example
+
+A simple setup with nginx and PHP-FPM may look like this `compose.yaml` file:
+
+```yaml
+services:
+  nginx:
+    image: geschke/nginx-swrm:latest
+    restart: unless-stopped
+    depends_on:
+      - php
+    volumes:
+      - ./html:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+    networks:
+      - website_net
+
+  phpbackend:
+    image: geschke/php-fpm-swrm:8.3-fpm-ubuntu24.04-sury-10
+    restart: unless-stopped
+    volumes:
+      - ./html:/var/www/html
+      - ./php/conf.d/99-custom.ini:/etc/php/8.3/fpm/conf.d/99-custom.ini:ro
+    networks:
+      - website_net
+
+networks:
+  website_net:
+```
+
+Start it with:
+
+```bash
+docker compose up -d
+```
+
+In this example, both containers mount `./html` to `/var/www/html`. This means the application files remain on the host system while both nginx and PHP-FPM access the same document root inside their containers.
+
+The nginx-specific mounts follow the normal nginx directory layout inside the container:
+
+* `./nginx/conf.d` → `/etc/nginx/conf.d`
+* `./nginx/sites-enabled` → `/etc/nginx/sites-enabled`
+
+The nginx configuration itself is not explained in detail here, because that belongs to the companion image and repository:
+
+`geschke/nginx-swrm`
+
+The PHP container uses the image tag `8.3-fpm-ubuntu24.04-sury-10`. That matters for the configuration path inside the container, because the PHP configuration layout follows the original Ubuntu and PHP package structure for the selected PHP version.
+
+In this case, the local file
+
+```text
+./php/conf.d/99-custom.ini
+```
+
+is mounted to
+
+```text
+/etc/php/8.3/fpm/conf.d/99-custom.ini
+```
+
+inside the container.
+
+This means that the mounted file directly extends or overrides the PHP-FPM configuration of the selected PHP version. If you use another PHP image tag, you must adjust the target path accordingly. For example, a PHP 8.4 image would use the matching `8.4` path inside `/etc/php/...`.
+
+The file `99-custom.ini` is optional. If you do not mount such a file, the image simply uses the default PHP configuration shipped with that image.
+
+A simple example for `99-custom.ini` could be:
+
+```ini
+upload_max_filesize = 20M
+post_max_size = 20M
+memory_limit = 256M
+max_execution_time = 120
+date.timezone = Europe/Berlin
+```
+
+You can use this file for typical PHP settings such as upload limits, memory limits, execution time, timezone settings, and similar adjustments.
+
+Additional files or directories can be mounted in the same way if further customization is needed. The general idea is always the same: local configuration on the host system is mounted into the corresponding configuration path inside the container.
+
+
+
+# Usage with Nginx
+
+This image is typically used together with an Nginx frontend.
+
+A minimal FastCGI configuration looks like this:
+
+```
+  # pass PHP scripts to FastCGI server
+  location ~ \.php$ {
+    include snippets/fastcgi-php.conf;
+    # Use the tcp connection
+    fastcgi_pass phpbackend:9000;
+    # ...but not the socket
+    #fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+    fastcgi_index index.php;
+    include fastcgi.conf;
+  }
+[...]
+```
 
 The example is from a working configuration of Nginx Ubuntu package. If not
 set in the fastcgi.conf, maybe it's necessary to add the following options:
@@ -93,33 +256,17 @@ set in the fastcgi.conf, maybe it's necessary to add the following options:
 These options are set as default in the fastcgi.conf file and could be
 changed in the location settings.
 
-At last, you have to configure the document root settings. Let's explain by
-example. The PHP files on your host are installed in:
 
-    /vol/www/phpapp1
+# Credits
 
-So the volume parameter when starting the container has to be:
+This image is based on:
 
-    -v /vol/www/phpapp1:/var/www/html
+* the official Ubuntu Docker image
+* PHP packages from Ubuntu and deb.sury.org
+* configuration snippets from the official PHP Docker image
 
-So inside the Docker container any of your PHP files could be reached within
-/var/www/html.
 
-Then you have to configure the document root as:
+# License
 
-    root /var/www/html;
+MIT License
 
-in your Nginx sites configuration file, e.g.
-/etc/nginx/sites-available/default.
-
-You can change this behaviour if you modify the SCRIPT_FILENAME option in
-the Nginx fastcgi options.
-
-## Usage example with Docker swarm mode
-
-Have a look at some blog articles at [www.kuerbis.org](https://www.kuerbis.org) (German only, please use Google Translate).
-
-## Credits
-
-This image is based on the official Ubuntu image, the Ubuntu or deb.sury.org PHP packages and uses
-some configuration snippets of the official PHP Docker image. Thank you all!
