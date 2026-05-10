@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2018-2026 Ralf Geschke
 
-FROM ubuntu:noble-20260217
+FROM ubuntu:noble-20260410
 
 LABEL org.opencontainers.image.authors="Ralf Geschke <ralf@kuerbis.org>"
 LABEL org.opencontainers.image.licenses="MIT"
 
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
-LABEL last_changed="2026-03-29"
+LABEL last_changed="2026-05-10"
 
 # Install PHP 8.3 with some libraries
 RUN export DEBIAN_FRONTEND=noninteractive  \
