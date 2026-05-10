@@ -55,17 +55,17 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       -
         name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
       -
         name: Login to Docker Hub
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
@@ -73,7 +73,7 @@ jobs:
       # Login to GitHub Container Repository
       - name: Log into registry ${{ env.REGISTRY_GITHUB }}
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY_GITHUB }}
           username: ${{ github.actor }}
@@ -122,7 +122,7 @@ jobs:
       -
         name: Build and push
         if: "${{ steps.query_tag.outputs.run_build == 'true' && steps.generate_tag.outputs.full_tag != '' }}"
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ${{ matrix.directory }}/Dockerfile
@@ -133,7 +133,7 @@ jobs:
             
       - name: Tag as latest if applicable
         if: "${{ matrix.setlatest == true && steps.query_tag.outputs.run_build == 'true' && steps.generate_tag.outputs.full_tag != '' }}"
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ${{ matrix.directory }}/Dockerfile

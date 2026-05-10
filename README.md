@@ -22,6 +22,7 @@ ones included in Ubuntu itself.
 
 ### Ubuntu 24.04 LTS based images (deb.sury.org packages)
 
+* `8.5-fpm-ubuntu24.04-sury-n`
 * `8.4-fpm-ubuntu24.04-sury-n`
 * `8.3-fpm-ubuntu24.04-sury-n`
 * `8.2-fpm-ubuntu24.04-sury-n`
