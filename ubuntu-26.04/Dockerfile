@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2018-2026 Ralf Geschke
 
-FROM ubuntu:noble-20260410
+FROM ubuntu:resolute-20260421
 
 LABEL org.opencontainers.image.authors="Ralf Geschke <ralf@kuerbis.org>"
 LABEL org.opencontainers.image.licenses="MIT"
@@ -9,25 +9,19 @@ LABEL org.opencontainers.image.licenses="MIT"
 LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
 LABEL last_changed="2026-05-10"
 
-# Install PHP 8.5 with some libraries from sury PPA
+# Install PHP 8.5 with some libraries
 RUN export DEBIAN_FRONTEND=noninteractive  \
   && apt-get update \
 	&& apt-get -y upgrade \
 	&& apt-get -y dist-upgrade \
-	&& apt-get install -y ca-certificates locales software-properties-common \
-	&& add-apt-repository -y ppa:ondrej/php \
-	&& apt-get update \
-	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-	&& apt-get install -y git ssmtp wget \
-	&& apt-get install -y php8.5-fpm \
-	php8.5-curl php8.5-mysql php8.5-intl \
-    php8.5-mbstring php8.5-bz2 php8.5-pgsql php8.5-xml php8.5-xsl php8.5-sqlite3 \
-	php8.5-zip php8.5-gd php8.5-mongodb php8.5-mcrypt php8.5-bcmath  \
-  php8.5-protobuf  php8.5-imagick php8.5-redis php8.5-memcache php8.5-memcached \
-	&& apt-get -y upgrade \
+  && apt-get install -y ca-certificates locales \
+  && sed -i 's/^# *\(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
+  && locale-gen \
+  && update-locale LANG=en_US.UTF-8 \
+	&& apt-get install -y git ssmtp wget php-fpm php-bcmath php-bz2 php-enchant php-gd php-gmp php-intl php-json \
+  php-mbstring php-mysql php-pgsql php-readline php-soap php-snmp php-soap php-sqlite3 php-tidy php-xml php-zip \
+	php-redis php-memcache php-memcached \
 	&& rm -rf /var/lib/apt/lists/* 
-	
-#\
 #	&& cp /usr/share/zoneinfo/Etc/UTC /etc/localtime
 # php-recode
 
@@ -43,7 +37,7 @@ RUN cd /tmp/ \
 # taken from official Docker PHP image
 RUN set -ex \
 	&& cd /etc/php/8.5/fpm \
-	&& mkdir -p /run/php \
+	#&& mkdir /run/php \
 	&& { \
 	echo '[global]'; \
 	echo 'error_log = /proc/self/fd/2'; \

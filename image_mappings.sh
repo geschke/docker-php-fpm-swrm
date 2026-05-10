@@ -5,6 +5,7 @@ IMAGE_NAME="geschke/php-fpm-swrm"
 declare -A images=(
   ["ubuntu-22.04"]="8.1-fpm"
   ["ubuntu-24.04"]="8.3-fpm"
+  ["ubuntu-26.04"]="8.5-fpm"
   ["ubuntu-22.04-sury-8.1"]="8.1-fpm-ubuntu22.04-sury"
   ["ubuntu-22.04-sury-8.2"]="8.2-fpm-ubuntu22.04-sury"
   ["ubuntu-22.04-sury-8.3"]="8.3-fpm-ubuntu22.04-sury"

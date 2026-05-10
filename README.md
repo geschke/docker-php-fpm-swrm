@@ -37,7 +37,8 @@ ones included in Ubuntu itself.
 
 These variants use the PHP version included directly in Ubuntu.
 
-* `8.3-fpm-n`, **latest** – PHP 8.3 included in Ubuntu 24.04 LTS
+* `8.5-fpm-n`, **latest** – PHP 8.5 included in Ubuntu 26.04 LTS
+* `8.3-fpm-n` – PHP 8.3 included in Ubuntu 24.04 LTS
 * `8.1-fpm-n` – PHP 8.1 included in Ubuntu 22.04 LTS
 
 ### Older / deprecated versions

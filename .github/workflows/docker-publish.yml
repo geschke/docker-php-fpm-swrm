@@ -30,6 +30,9 @@ jobs:
             setlatest: false
           - directory: ./ubuntu-24.04/
             tagging: 8.3-fpm
+            setlatest: false
+          - directory: ./ubuntu-26.04/
+            tagging: 8.5-fpm
             setlatest: true
           - directory: ./ubuntu-22.04-sury-8.1/
             tagging: 8.1-fpm-ubuntu22.04-sury
