@@ -13,5 +13,5 @@ declare -A images=(
   ["ubuntu-24.04-sury-8.3"]="8.3-fpm-ubuntu24.04-sury"
   ["ubuntu-24.04-sury-8.4"]="8.4-fpm-ubuntu24.04-sury"
   ["ubuntu-24.04-sury-8.5"]="8.5-fpm-ubuntu24.04-sury"
-
+  ["ubuntu-26.04-sury-8.4"]="8.4-fpm-ubuntu26.04-sury"
 )

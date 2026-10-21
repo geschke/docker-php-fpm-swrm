@@ -1,0 +1,75 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2018-2026 Ralf Geschke
+
+FROM ubuntu:resolute-20261006
+
+LABEL org.opencontainers.image.authors="Ralf Geschke <ralf@kuerbis.org>"
+LABEL org.opencontainers.image.licenses="MIT"
+
+LABEL maintainer="Ralf Geschke <ralf@kuerbis.org>"
+LABEL last_changed="2026-10-21"
+
+# Install PHP 8.4 with some libraries from sury PPA
+RUN export DEBIAN_FRONTEND=noninteractive  \
+  && apt-get update \
+	&& apt-get -y upgrade \
+	&& apt-get -y dist-upgrade \
+	&& apt-get install -y ca-certificates locales software-properties-common curl \
+  && curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
+  && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
+  && sh -c 'echo "deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list' \
+	&& apt-get update \
+	&& localedef -i en_US -c -f UTF-8 en_US.UTF-8 \
+	&& apt-get install -y git ssmtp wget \
+	&& apt-get install -y php8.4-fpm \
+	php8.4-curl php8.4-mysql php8.4-intl \
+    php8.4-mbstring php8.4-bz2 php8.4-pgsql php8.4-xml php8.4-xsl php8.4-sqlite3 \
+	php8.4-opcache php8.4-zip php8.4-gd php8.4-mongodb php8.4-mcrypt php8.4-bcmath  \
+  php8.4-protobuf  php8.4-imagick php8.4-redis php8.4-memcache php8.4-memcached \
+	&& apt-get -y upgrade \
+	&& rm -rf /var/lib/apt/lists/* 
+	
+#\
+#	&& cp /usr/share/zoneinfo/Etc/UTC /etc/localtime
+# php-recode
+
+ENV LANG=en_US.utf8
+
+# Install composer
+COPY install-composer.sh /tmp 
+RUN cd /tmp/ \
+  && sh install-composer.sh \
+	&& mv /tmp/composer.phar /usr/local/bin/composer \
+	&& rm install-composer.sh
+
+# taken from official Docker PHP image
+RUN set -ex \
+	&& cd /etc/php/8.4/fpm \
+	&& mkdir -p /run/php \
+	&& { \
+	echo '[global]'; \
+	echo 'error_log = /proc/self/fd/2'; \
+	echo; \
+	echo '[www]'; \
+	echo '; if we send this to /proc/self/fd/1, it never appears'; \
+	echo 'access.log = /proc/self/fd/2'; \
+	echo; \
+	echo 'clear_env = no'; \
+	echo; \
+	echo '; Ensure worker stdout and stderr are sent to the main error log.'; \
+	echo 'catch_workers_output = yes'; \
+	} | tee pool.d/docker.conf \
+	&& { \
+	echo '[global]'; \
+	echo 'daemonize = no'; \
+	echo; \
+	echo '[www]'; \
+	echo 'listen = [::]:9000'; \
+	} | tee pool.d/zz-docker.conf
+
+
+WORKDIR /usr/share/nginx/html
+
+EXPOSE 9000
+
+CMD ["php-fpm8.4"]

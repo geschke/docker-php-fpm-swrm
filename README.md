@@ -20,6 +20,10 @@ ones included in Ubuntu itself.
 
 `n` represents the **build number**. Higher numbers indicate newer builds.
 
+### Ubuntu 26.04 LTS based images (deb.sury.org packages)
+
+* `8.4-fpm-ubuntu24.04-sury-n`
+
 ### Ubuntu 24.04 LTS based images (deb.sury.org packages)
 
 * `8.5-fpm-ubuntu24.04-sury-n`
