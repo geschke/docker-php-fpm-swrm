@@ -14,7 +14,7 @@ RUN export DEBIAN_FRONTEND=noninteractive  \
   && apt-get update \
 	&& apt-get -y upgrade \
 	&& apt-get -y dist-upgrade \
-	&& apt-get install -y ca-certificates locales software-properties-common \
+	&& apt-get install -y ca-certificates locales software-properties-common curl \
   && curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
   && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
   && sh -c 'echo "deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list' \
