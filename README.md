@@ -3,26 +3,24 @@
 Minimal **PHP-FPM Docker images based on Ubuntu LTS distributions**.
 
 The images provide multiple PHP versions either from the official Ubuntu repositories or from the widely used
-[https://launchpad.net/~ondrej/+archive/ubuntu/php/](https://launchpad.net/~ondrej/+archive/ubuntu/php/) repository.
+[https://deb.sury.org/](https://deb.sury.org/) repository.
 
 The repository name still contains `swrm` for historical reasons. The image was originally created for Docker Swarm deployments, but today it is primarily used as a **general-purpose PHP-FPM container for standard Docker setups**. The repository name is kept for compatibility.
 
 
 ## Supported PHP Versions
 
-Most PHP versions in these images are built using the packages from the
-Ondřej Surý PHP repository:
+Most PHP versions used in these Docker images are provided by the 
+[https://packages.sury.org/php/](Ondřej Surý PHP repository), which was previously hosted on [https://launchpad.net/~ondrej/+archive/ubuntu/php/](Launchpad).
 
-https://launchpad.net/~ondrej/+archive/ubuntu/php/
-
-This repository provides newer PHP versions for Ubuntu LTS releases than the
-ones included in Ubuntu itself.
+This repository provides up-to-date PHP packages for Ubuntu LTS releases, including versions not available in the official Ubuntu repositories. 
 
 `n` represents the **build number**. Higher numbers indicate newer builds.
 
 ### Ubuntu 26.04 LTS based images (deb.sury.org packages)
 
-* `8.4-fpm-ubuntu24.04-sury-n`
+* `8.5-fpm-ubuntu26.04-sury-n`
+* `8.4-fpm-ubuntu26.04-sury-n`
 
 ### Ubuntu 24.04 LTS based images (deb.sury.org packages)
 
