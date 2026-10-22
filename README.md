@@ -11,7 +11,7 @@ The repository name still contains `swrm` for historical reasons. The image was 
 ## Supported PHP Versions
 
 Most PHP versions used in these Docker images are provided by the 
-[https://packages.sury.org/php/](Ondřej Surý PHP repository), which was previously hosted on [https://launchpad.net/~ondrej/+archive/ubuntu/php/](Launchpad).
+[Ondřej Surý PHP repository](https://packages.sury.org/php/), which was previously hosted on [Launchpad](https://launchpad.net/~ondrej/+archive/ubuntu/php/).
 
 This repository provides up-to-date PHP packages for Ubuntu LTS releases, including versions not available in the official Ubuntu repositories. 
 
